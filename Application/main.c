@@ -33,8 +33,8 @@ void TIM_PWM_Init(void)
 	GPIO_Init(GPIOB,&GPIO_InitStructure);
 
 	/* TIM */
-	TIM_TimeBaseStructure.TIM_Period = 9999;
-	TIM_TimeBaseStructure.TIM_Prescaler = 143;//50Hz
+	TIM_TimeBaseStructure.TIM_Period = 1999;
+	TIM_TimeBaseStructure.TIM_Prescaler = 719;//50Hz
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
@@ -139,7 +139,6 @@ void angle_to_pwm(void)
 		if(angle[i]<0.0 || angle[i]>180.0)
 		{
 			LED1_TOGGLE;
-			//angle[i]=90.0;
 			continue;
 		}
 
@@ -222,7 +221,6 @@ int main(void)
 
 	while(1)
 	{
-		
 		if(!recv_cmd())
 		{
 			angle_to_pwm();
