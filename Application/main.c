@@ -132,7 +132,7 @@ uint16_t pwm[ROBOTIC_ARM_NUM]={0};
 //90-1.5ms-150
 //135-2ms-200
 //180-2.5ms-250
-void angle_to_pwm()
+void angle_to_pwm(void)
 {
 	for(int i=0;i<ROBOTIC_ARM_NUM;i++)
 	{
@@ -145,6 +145,65 @@ void angle_to_pwm()
 
 		pwm[i]=50+200.0/180*angle[i];
 	}
+}
+
+//查询方式从UART1取一个byte
+uint8_t recv_byte(void)
+{
+	while(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET);
+	return USART_ReceiveData(USART1);
+}
+
+//Data format: 0xCC (0x00~0x07 0x00~0xB4 0x00~0xBB)* 0xFF
+//			   STX      SEQ       ANG       CHK      END
+//Return val: 0 -- ok
+//            1 -- no incoming cmd
+//			  2 -- invalid STX
+//            3 -- invalid index exists
+//            4 -- invalid angle exists
+//            5 -- invalid check sum exists
+uint8_t recv_cmd(void)
+{
+	uint8_t data = 0xFF;
+	uint8_t index = 0xFF;
+	uint8_t ang=0x00;
+	uint8_t chk_sum=0xFF;
+	uint8_t ret=0x00;	
+	
+	if(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)
+		return 0x01;
+	
+	data = USART_ReceiveData(USART1);
+	if(data==0xCC)//起始字节
+	{		
+		data=recv_byte();
+		while(data!=0xFF)//终止字节
+		{
+			index=data;
+			if(index<ROBOTIC_ARM_NUM)//序号
+			{
+				ang=recv_byte();//角度
+				if(ang<=180)
+				{	
+					chk_sum=recv_byte();//校验和
+					if(chk_sum==index+ang)
+						angle[index]=data*1.0;
+					else
+						ret = 0x05;
+				}
+				else
+					ret=0x04;
+			}
+			else
+				ret=0x03;
+			
+			while(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET);
+			data=USART_ReceiveData(USART1);
+		}
+		return ret;
+	}
+	else
+		return 0x02;	
 }
 
 int main(void)
@@ -163,19 +222,22 @@ int main(void)
 
 	while(1)
 	{
-		angle_to_pwm();
+		
+		if(!recv_cmd())
+		{
+			angle_to_pwm();
 
-		TIM_SetCompare1(TIM3,pwm[0]);
-		TIM_SetCompare2(TIM3,pwm[1]);
-		TIM_SetCompare3(TIM3,pwm[2]);
-		TIM_SetCompare4(TIM3,pwm[3]);
+			TIM_SetCompare1(TIM3,pwm[0]);
+			TIM_SetCompare2(TIM3,pwm[1]);
+			TIM_SetCompare3(TIM3,pwm[2]);
+			TIM_SetCompare4(TIM3,pwm[3]);
 
-		TIM_SetCompare1(TIM4,pwm[4]);
-		TIM_SetCompare2(TIM4,pwm[5]);
-		TIM_SetCompare3(TIM4,pwm[6]);
-		TIM_SetCompare4(TIM4,pwm[7]);
-
-		delay_ms(500);
-		LED0_TOGGLE;
+			TIM_SetCompare1(TIM4,pwm[4]);
+			TIM_SetCompare2(TIM4,pwm[5]);
+			TIM_SetCompare3(TIM4,pwm[6]);
+			TIM_SetCompare4(TIM4,pwm[7]);
+			
+			LED1_TOGGLE;
+		}
 	}
 }
