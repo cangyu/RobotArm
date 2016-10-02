@@ -33,8 +33,10 @@ void TIM_PWM_Init(void)
 	GPIO_Init(GPIOB,&GPIO_InitStructure);
 
 	/* TIM */
-	TIM_TimeBaseStructure.TIM_Period = 1999;
-	TIM_TimeBaseStructure.TIM_Prescaler = 719;//50Hz
+	TIM_TimeBaseStructure.TIM_Period = 2999;
+	TIM_TimeBaseStructure.TIM_Prescaler = 71;//333.33Hz
+//	TIM_TimeBaseStructure.TIM_Period = 1999;
+//	TIM_TimeBaseStructure.TIM_Prescaler = 719;//50Hz
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
@@ -123,26 +125,26 @@ void LED_Init(void)
 #define LED1_OFF 		GPIOB->BRR = GPIO_Pin_14
 #define LED1_TOGGLE 	GPIOB->ODR ^= GPIO_Pin_14
 
-float angle[ROBOTIC_ARM_NUM];
-uint16_t pwm[ROBOTIC_ARM_NUM]={0};
+float angle[ROBOTIC_ARM_NUM]={45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0};
+float angle_min[ROBOTIC_ARM_NUM]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+float angle_max[ROBOTIC_ARM_NUM]={90.0, 90.0, 90.0, 90.0, 90.0, 90.0, 90.0, 90.0};
 
-//Servo PWM Standard Period: 20ms, (pwm signal 2000 total)
-//0-0.5ms-50
-//45-1ms-100
-//90-1.5ms-150
-//135-2ms-200
-//180-2.5ms-250
+uint16_t pwm[ROBOTIC_ARM_NUM]={1520, 1520, 1520, 1520, 1520, 1520, 1520, 1520};
+uint16_t pwm_min[ROBOTIC_ARM_NUM]={900, 900, 900, 900, 900, 900, 900, 900};
+uint16_t pwm_max[ROBOTIC_ARM_NUM]={2100, 2100, 2100, 2100, 2100, 2100, 2100, 2100};
+
+//Servo PWM Standard Period: 3000us
 void angle_to_pwm(void)
 {
 	for(int i=0;i<ROBOTIC_ARM_NUM;i++)
 	{
-		if(angle[i]<0.0 || angle[i]>180.0)
+		if(angle[i]<angle_min[i] || angle[i]>angle_max[i])
 		{
-			LED1_TOGGLE;
+			LED0_TOGGLE;
 			continue;
 		}
 
-		pwm[i]=50+200.0/180*angle[i];
+		pwm[i]=(uint16_t)(pwm_min[i]+(pwm_max[i]-pwm_min[i])/angle_max[i]*angle[i]);
 	}
 }
 
@@ -186,7 +188,7 @@ uint8_t recv_cmd(void)
 				{	
 					chk_sum=recv_byte();//Ð£ÑéºÍ
 					if(chk_sum==index+ang)
-						angle[index]=data*1.0;
+						angle[index]=ang*1.0;
 					else
 						ret = 0x05;
 				}
@@ -205,6 +207,20 @@ uint8_t recv_cmd(void)
 		return 0x02;	
 }
 
+//Drive the servos physically
+void set_servo(void)
+{
+	TIM_SetCompare1(TIM3,pwm[0]);delay_ms(2);
+	TIM_SetCompare2(TIM3,pwm[1]);delay_ms(2);
+	TIM_SetCompare3(TIM3,pwm[2]);delay_ms(2);
+	TIM_SetCompare4(TIM3,pwm[3]);delay_ms(2);
+
+	TIM_SetCompare1(TIM4,pwm[4]);delay_ms(2);
+	TIM_SetCompare2(TIM4,pwm[5]);delay_ms(2);
+	TIM_SetCompare3(TIM4,pwm[6]);delay_ms(2);
+	TIM_SetCompare4(TIM4,pwm[7]);delay_ms(2);
+}
+
 int main(void)
 {
 	if (SysTick_Config(SystemCoreClock / 1000))
@@ -213,28 +229,15 @@ int main(void)
 	TIM_PWM_Init();
 	UART_COM_Init();
 	LED_Init();
+	set_servo();//Init all servo to mid-point
 	
 	LED0_ON;
-
-	for(int i=0;i<ROBOTIC_ARM_NUM;i++)
-		angle[i]=0.0;
-
 	while(1)
 	{
 		if(!recv_cmd())
 		{
 			angle_to_pwm();
-
-			TIM_SetCompare1(TIM3,pwm[0]);
-			TIM_SetCompare2(TIM3,pwm[1]);
-			TIM_SetCompare3(TIM3,pwm[2]);
-			TIM_SetCompare4(TIM3,pwm[3]);
-
-			TIM_SetCompare1(TIM4,pwm[4]);
-			TIM_SetCompare2(TIM4,pwm[5]);
-			TIM_SetCompare3(TIM4,pwm[6]);
-			TIM_SetCompare4(TIM4,pwm[7]);
-			
+			set_servo();
 			LED1_TOGGLE;
 		}
 	}
