@@ -1,8 +1,10 @@
 #include <stdint.h>
+#include <string.h>
 #include "stm32f10x.h"
 
 #define ROBOTIC_ARM_NUM 10
-#define MOVE_SLICE 6
+#define MOVE_SLICE 8
+#define STEP_GAP 20
 
 GPIO_InitTypeDef GPIO_InitStructure;  
 TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;  
@@ -104,7 +106,7 @@ void UART_COM_Init(void)
 	GPIO_Init(GPIOA,&GPIO_InitStructure);
 
 	/* USART1 */
-	USART_InitStructure.USART_BaudRate = 115200;
+	USART_InitStructure.USART_BaudRate = 57600;
 	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
 	USART_InitStructure.USART_StopBits = USART_StopBits_1;
 	USART_InitStructure.USART_Parity = USART_Parity_No;
@@ -231,15 +233,18 @@ void set_servo(uint16_t _pwm[])
 	TIM_SetCompare2(TIM4, _pwm[5]);
 	TIM_SetCompare3(TIM4, _pwm[6]);
 	TIM_SetCompare4(TIM4, _pwm[7]);
+	
+	TIM_SetCompare1(TIM2, _pwm[8]);
+	TIM_SetCompare2(TIM2, _pwm[9]);
 
-	delay_ms(10);
+	delay_ms(STEP_GAP);
 }
 
 void move_servo(void)
 {
 	uint16_t prev_pwm[ROBOTIC_ARM_NUM], step[ROBOTIC_ARM_NUM], tmp_pwm[ROBOTIC_ARM_NUM];
 
-	memcpy(prev_pwm, pwm, sizeof(cur_pwm));
+	memcpy(prev_pwm, pwm, sizeof(prev_pwm));
 	angle_to_pwm();
 
 	for (int i = 0; i < ROBOTIC_ARM_NUM; i++)
