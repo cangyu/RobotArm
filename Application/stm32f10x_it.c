@@ -24,9 +24,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
 
-/* External Variable ---------------------------------------------------------*/
-extern __IO uint32_t TimingDelay;
-
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -122,20 +119,18 @@ void DebugMon_Handler(void)
   * @param  None
   * @retval None
   */
-void PendSV_Handler(void)
-{
-}
+//void PendSV_Handler(void)
+//{
+//}
 
 /**
   * @brief  This function handles SysTick Handler.
   * @param  None
   * @retval None
   */
-void SysTick_Handler(void)
-{
-	if (TimingDelay != 0)
-		--TimingDelay;
-}
+//void SysTick_Handler(void)
+//{
+//}
 
 /******************************************************************************/
 /*                 STM32F10x Peripherals Interrupt Handlers                   */
