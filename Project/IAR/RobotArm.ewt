@@ -2374,6 +2374,48 @@
   <group>
     <name>uC/OS-II</name>
     <group>
+      <name>CPU</name>
+      <group>
+        <name>Port</name>
+        <file>
+          <name>$PROJ_DIR$\..\..\uC-CPU\Ports\ARM-Cortex-M3\IAR\cpu_a.asm</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\uC-CPU\Ports\ARM-Cortex-M3\IAR\cpu_c.c</name>
+        </file>
+      </group>
+      <group>
+        <name>Src</name>
+        <file>
+          <name>$PROJ_DIR$\..\..\uC-CPU\cpu_core.c</name>
+        </file>
+      </group>
+    </group>
+    <group>
+      <name>LIB</name>
+      <group>
+        <name>Port</name>
+        <file>
+          <name>$PROJ_DIR$\..\..\uC-LIB\Ports\ARM-Cortex-M3\IAR\lib_mem_a.asm</name>
+        </file>
+      </group>
+      <group>
+        <name>Src</name>
+        <file>
+          <name>$PROJ_DIR$\..\..\uC-LIB\lib_ascii.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\uC-LIB\lib_math.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\uC-LIB\lib_mem.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\uC-LIB\lib_str.c</name>
+        </file>
+      </group>
+    </group>
+    <group>
       <name>OS</name>
       <group>
         <name>Port</name>
@@ -2418,48 +2460,6 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\uCOS-II\Source\os_tmr.c</name>
-        </file>
-      </group>
-    </group>
-    <group>
-      <name>CPU</name>
-      <group>
-        <name>Port</name>
-        <file>
-          <name>$PROJ_DIR$\..\..\uC-CPU\Ports\ARM-Cortex-M3\IAR\cpu_a.asm</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\uC-CPU\Ports\ARM-Cortex-M3\IAR\cpu_c.c</name>
-        </file>
-      </group>
-      <group>
-        <name>Src</name>
-        <file>
-          <name>$PROJ_DIR$\..\..\uC-CPU\cpu_core.c</name>
-        </file>
-      </group>
-    </group>
-    <group>
-      <name>LIB</name>
-      <group>
-        <name>Port</name>
-        <file>
-          <name>$PROJ_DIR$\..\..\uC-LIB\Ports\ARM-Cortex-M3\IAR\lib_mem_a.asm</name>
-        </file>
-      </group>
-      <group>
-        <name>Src</name>
-        <file>
-          <name>$PROJ_DIR$\..\..\uC-LIB\lib_ascii.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\uC-LIB\lib_math.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\uC-LIB\lib_mem.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\uC-LIB\lib_str.c</name>
         </file>
       </group>
     </group>

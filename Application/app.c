@@ -1,5 +1,7 @@
 #include <includes.h>
 
+OS_FLAG_GRP  *ServoModify;
+
 /* Task Stacks */
 static OS_STK App_TaskStartStk[APP_CFG_TASK_START_STK_SIZE];
 static OS_STK App_Task_Report_Stk[APP_CFG_TASK_REPORT_STK_SIZE];
@@ -95,6 +97,14 @@ static void App_TaskStart(void *p_arg)
  */
 static void App_EventCreate (void)
 {
+  	CPU_INT08U err;
+  	
+	ServoModify=OSFlagCreate(0,&err);
+	assert(ServoModify && err==OS_ERR_NONE);
+#if (OS_EVENT_NAME_EN > 0)
+  	OSFlagNameSet(ServoModify, "ModifyServos", &err);
+	assert(err==OS_ERR_NONE);
+#endif
 }
 
 /**
@@ -142,21 +152,6 @@ static void App_TaskCreate(void)
 }
 
 /**
- * @brief  Report the status, just for test.
- * @param  p_arg  Pointer to argument, not used here.
- * @ret    None.
- */
-static void App_Task_Report(void *p_arg)
-{
-    (void)p_arg;
-
-    while (DEF_TRUE) 
-    {
-        OSTimeDlyHMSM(0, 5, 0, 0);
-    }
-}
-
-/**
  * @brief  Receive cmds and move the servos gradually.
  * @param  p_arg  Pointer to argument, not used here.
  * @ret    None.
@@ -164,9 +159,12 @@ static void App_Task_Report(void *p_arg)
 static void App_Task_Servo(void *p_arg)
 {
     (void)p_arg;
+	uint8_t err=0x00;
 
     while (DEF_TRUE) 
     {
+	  	OSFlagPend(ServoModify, (OS_FLAGS)(1111111111b),OS_FLAG_WAIT_SET_ALL, 0,&err);
+		assert(err==OS_ERR_NONE);
 	  	Servo_Run();
     }
 }

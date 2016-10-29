@@ -1,10 +1,10 @@
 #ifndef _SERVO_H_
 #define _SERVO_H_
 
-#include <cstdint>
-#include <cstring>
-#include <cassert>
-#include <algorithm>
+#include <stdint.h>
+#include <string.h>
+#include <assert.h>
+#include <math.h>
 #include <ucos_ii.h>
 #include "stm32f10x.h"
 #include "RobotArmCtrlBoard.h"
