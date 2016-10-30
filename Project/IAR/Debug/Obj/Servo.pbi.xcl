@@ -1,5 +1,5 @@
-"C:\Users\Administrator\Desktop\RobotArm\BSP\Servo.cpp"
--std=c++98
+"C:\Users\Administrator\Desktop\RobotArm\BSP\Servo.c"
+-std=c99
 -ferror-limit=100
 -I
 C:\Users\Administrator\Desktop\RobotArm\Project\IAR\..\..\Application
@@ -25,8 +25,6 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\CMSIS\Include
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\inc
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\inc\c
--I
-C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\inc\ecpp
 -I
 C:\Users\Administrator\Desktop\RobotArm\Application
 -I
@@ -250,12 +248,10 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\CMSIS\Include
 -D__HAS_LOCATED_WITH_INIT__=1
 -D__IAR_COMPILERBASE__=594957
 -D__STDC__=1
--D__cplusplus=199711L
--D__iar_extended_embedded_cplusplus=1
--D__embedded_cplusplus=1
--D__WCHAR_T=1
--D__BOOL=1
--D__ARRAY_OPERATORS=1
+-D__STDC_VERSION__=199901L
+-D__STDC_HOSTED__=1
+-D__STDC_NO_VLA__=1
+-D__STDC_NO_ATOMICS__=1
 -D__EDG_IA64_ABI=1
 -D__EDG_IA64_ABI_VARIANT_CTORS_AND_DTORS_RETURN_THIS=1
 -D__EDG_IA64_ABI_USE_INT_STATIC_INIT_GUARD=1

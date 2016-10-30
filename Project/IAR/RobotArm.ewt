@@ -2329,7 +2329,7 @@
       <name>$PROJ_DIR$\..\..\BSP\RobotArmCtrlBoard.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\BSP\Servo.cpp</name>
+      <name>$PROJ_DIR$\..\..\BSP\Servo.c</name>
     </file>
   </group>
   <group>

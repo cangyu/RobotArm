@@ -373,7 +373,7 @@
         </option>
         <option>
           <name>IccLang</name>
-          <state>2</state>
+          <state>0</state>
         </option>
         <option>
           <name>IccCDialect</name>
@@ -1943,7 +1943,7 @@
       <name>$PROJ_DIR$\..\..\BSP\RobotArmCtrlBoard.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\BSP\Servo.cpp</name>
+      <name>$PROJ_DIR$\..\..\BSP\Servo.c</name>
     </file>
   </group>
   <group>
