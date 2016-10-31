@@ -1676,7 +1676,7 @@
         </option>
         <option>
           <name>MemFile</name>
-          <state></state>
+          <state>$TOOLKIT_DIR$\CONFIG\debugger\ST\STM32F103C8.ddf</state>
         </option>
         <option>
           <name>RunToEnable</name>
@@ -1716,11 +1716,11 @@
         </option>
         <option>
           <name>OCDynDriverList</name>
-          <state>ARMSIM_ID</state>
+          <state>JLINK_ID</state>
         </option>
         <option>
           <name>OCLastSavedByProductVersion</name>
-          <state></state>
+          <state>7.70.1.11471</state>
         </option>
         <option>
           <name>UseFlashLoader</name>
@@ -1744,7 +1744,7 @@
         </option>
         <option>
           <name>FlashLoadersV3</name>
-          <state></state>
+          <state>$TOOLKIT_DIR$\config\flashloader\ST\FlashSTM32F10xx8.board</state>
         </option>
         <option>
           <name>OCImagesSuppressCheck1</name>
@@ -1812,7 +1812,7 @@
         </option>
         <option>
           <name>OCMulticoreNrOfCores</name>
-          <state></state>
+          <state>1</state>
         </option>
         <option>
           <name>OCMulticoreMaster</name>
@@ -2524,12 +2524,12 @@
         </option>
         <option>
           <name>CCJLinkInterfaceRadio</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCJLinkResetList</name>
           <version>6</version>
-          <state>5</state>
+          <state>7</state>
         </option>
         <option>
           <name>CCJLinkInterfaceCmdLine</name>
@@ -2594,11 +2594,11 @@
         </option>
         <option>
           <name>CCCpuClockEdit</name>
-          <state></state>
+          <state>72.0</state>
         </option>
         <option>
           <name>CCSwoClockAuto</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCSwoClockEdit</name>

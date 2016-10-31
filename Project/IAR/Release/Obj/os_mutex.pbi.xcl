@@ -2,9 +2,53 @@
 -std=c99
 -ferror-limit=100
 -I
+C:\Users\Administrator\Desktop\RobotArm\Project\IAR\..\..\Application
+-I
+C:\Users\Administrator\Desktop\RobotArm\Project\IAR\..\..\BSP
+-I
+C:\Users\Administrator\Desktop\RobotArm\Project\IAR\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc
+-I
+C:\Users\Administrator\Desktop\RobotArm\Project\IAR\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x
+-I
+C:\Users\Administrator\Desktop\RobotArm\Project\IAR\..\..\uC-CPU
+-I
+C:\Users\Administrator\Desktop\RobotArm\Project\IAR\..\..\uC-CPU\Ports\ARM-Cortex-M3\IAR
+-I
+C:\Users\Administrator\Desktop\RobotArm\Project\IAR\..\..\uC-LIB
+-I
+C:\Users\Administrator\Desktop\RobotArm\Project\IAR\..\..\uC-LIB\Ports\ARM-Cortex-M3\IAR
+-I
+C:\Users\Administrator\Desktop\RobotArm\Project\IAR\..\..\uCOS-II\Ports\ARM-Cortex-M\Generic\IAR
+-I
+C:\Users\Administrator\Desktop\RobotArm\Project\IAR\..\..\uCOS-II\Source
+-I
+C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\CMSIS\Include
+-I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\inc
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\inc\c
+-I
+C:\Users\Administrator\Desktop\RobotArm\Application
+-I
+C:\Users\Administrator\Desktop\RobotArm\BSP
+-I
+C:\Users\Administrator\Desktop\RobotArm\Libraries\STM32F10x_StdPeriph_Driver\inc
+-I
+C:\Users\Administrator\Desktop\RobotArm\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x
+-I
+C:\Users\Administrator\Desktop\RobotArm\uC-CPU
+-I
+C:\Users\Administrator\Desktop\RobotArm\uC-CPU\Ports\ARM-Cortex-M3\IAR
+-I
+C:\Users\Administrator\Desktop\RobotArm\uC-LIB
+-I
+C:\Users\Administrator\Desktop\RobotArm\uC-LIB\Ports\ARM-Cortex-M3\IAR
+-I
+C:\Users\Administrator\Desktop\RobotArm\uCOS-II\Ports\ARM-Cortex-M\Generic\IAR
+-I
+C:\Users\Administrator\Desktop\RobotArm\uCOS-II\Source
+-I
+C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\CMSIS\Include
 -DNDEBUG=1
 -D__CHAR_BITS__=8
 -D__CHAR_MAX__=0xff

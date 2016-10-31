@@ -86,7 +86,7 @@ static void App_TaskStart(void *p_arg)
 	while(DEF_TRUE)
 	{
 	  	LED0_TOGGLE;
-	  	OSTimeDlyHMSM(0, 0, 0, 500);
+	  	OSTimeDlyHMSM(0, 0, 1, 0);
 	}
 }
 
@@ -129,7 +129,6 @@ static void App_TaskCreate(void)
 {
     CPU_INT08U  err;
 	
-	/*
 	err=OSTaskCreateExt((void (*)(void *)) App_Task_ServoUpdate,
 						(void           *) 0,
 						(OS_STK         *)&App_Task_ServoUpdate_Stk[APP_CFG_TASK_SERVO_UPDATE_STK_SIZE - 1],
@@ -145,7 +144,6 @@ static void App_TaskCreate(void)
     OSTaskNameSet(APP_CFG_TASK_SERVO_UPDATE_PRIO, "ServoUpdate", &err);
 	assert(err==OS_ERR_NONE);
 #endif
-	*/
 	
 	for(int i=0;i<ROBOTIC_ARM_NUM;i++)
 	{

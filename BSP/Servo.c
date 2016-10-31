@@ -201,9 +201,7 @@ void Servo_InitMove(void)
  *	Signal all used servos.
  */
 void Servo_Run(void)
-{	
-  	uint8_t flag=0x00;
-	
+{		
 	while(recv_cmd());
 
 	LED1_TOGGLE;
@@ -213,7 +211,7 @@ void Servo_Run(void)
 			continue;
 		
 		target_angle[i]=angle[i];
-		flag=OSSemPost(SemApply[i]);
+		uint8_t flag=OSSemPost(SemApply[i]);
 		assert(flag==OS_ERR_NONE); 	
 	}
 }
