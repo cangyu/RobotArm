@@ -9,7 +9,7 @@
 
 /* Start */
 #define APP_CFG_TASK_START_STK_SIZE 128
-#define APP_CFG_TASK_START_PRIO 60
+#define APP_CFG_TASK_START_PRIO 12
 
 /* ServoUpdate */
 #define APP_CFG_TASK_SERVO_UPDATE_STK_SIZE 128

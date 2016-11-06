@@ -2,6 +2,18 @@
 
 <userOverrides>
   <override>
+    <path>C:\Users\Administrator\Desktop\RobotArm\Application\s_curve.c</path>
+    <encoding>UTF-8</encoding>
+  </override>
+  <override>
+    <path>C:\Users\Administrator\Desktop\RobotArm\Application\s_curve.cpp</path>
+    <encoding>UTF-8</encoding>
+  </override>
+  <override>
+    <path>C:\Users\Administrator\Desktop\RobotArm\Application\s_curve.hpp</path>
+    <encoding>UTF-8</encoding>
+  </override>
+  <override>
     <path>C:\Users\Administrator\Desktop\RobotArm\BSP\Servo.c</path>
     <encoding>UTF-8</encoding>
   </override>

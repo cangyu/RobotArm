@@ -10,11 +10,13 @@
 #include <ucos_ii.h>
 #include "stm32f10x.h"
 #include "RobotArmCtrlBoard.h"
-#include "s_curve.h"
 
 /* Defines */
 #define ROBOTIC_ARM_NUM 10
 #define SERVOS_USED 0x017F
+
+#define SEGMENT_NUM 7
+#define ACCELERATION_UTILITY 0
 
 /* Global Variables */
 extern char* servo_name[ROBOTIC_ARM_NUM];
@@ -36,7 +38,7 @@ int min(int a, int b);
 int max(int a, int b);
 int angle2pwm(int i, float _ang);
 float pwm2ang(int i, int _pwm);
-void move(int i);
+extern void move(int i);
 void advance_to_next(int i);
 void pos_update(int index);
 void Servo_InitMove(void);

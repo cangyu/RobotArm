@@ -1,7 +1,7 @@
 #include <includes.h>
 
+/* Servo flags */
 OS_FLAG_GRP  *ServoModify;
-extern struct Servo s[ROBOTIC_ARM_NUM];
 
 /* Task Stacks */
 static OS_STK App_TaskStartStk[APP_CFG_TASK_START_STK_SIZE];
@@ -61,13 +61,12 @@ int main(void)
 static void App_TaskStart(void *p_arg)
 {	
 	(void)p_arg;
+	/* Initialize the SysTick */
+	OS_CPU_SysTickInit(72000000);
 	
 	/* Initialize the board and Servos*/	 
 	BSP_Init();
 	Servo_InitMove();
-	
-	/* Initialize the SysTick */
-	OS_CPU_SysTickInit(72000000);
 	
 #if (OS_TASK_STAT_EN > 0)
     OSStatInit();
@@ -191,7 +190,20 @@ static void App_Task_ServoUpdate(void *p_arg)
  * @param  p_arg  Pointer to index.
  * @ret    None.
  */
-static void App_Task_ServoMove(void *p_arg)
+//extern void move(int i);
+void move(int i)
+{
+	uint8_t flag=0x00;
+	
+	OSSemPend(SemApply[i], 0, &flag);
+	assert(flag==OS_ERR_NONE);
+	
+	target_pwm[i]=angle2pwm(i, target_angle[i]);
+	optimized_move(i);
+	OSFlagPost(ServoModify,(OS_FLAGS)(1<<i),OS_FLAG_SET,&flag);
+	assert(flag==OS_ERR_NONE);
+}
+void App_Task_ServoMove(void *p_arg)
 {
 	while (DEF_TRUE)
 	  	move((int)p_arg);

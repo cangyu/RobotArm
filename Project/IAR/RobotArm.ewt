@@ -2320,9 +2320,6 @@
       <name>$PROJ_DIR$\..\..\Application\app.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\Application\s_curve.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\..\Application\stm32f10x_it.c</name>
     </file>
   </group>
@@ -2332,7 +2329,10 @@
       <name>$PROJ_DIR$\..\..\BSP\RobotArmCtrlBoard.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\BSP\Servo.c</name>
+      <name>$PROJ_DIR$\..\..\BSP\Servo.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\BSP\Servo.h</name>
     </file>
   </group>
   <group>
@@ -2356,9 +2356,6 @@
       <name>STM32F10x_StdPeriph_Driver</name>
       <file>
         <name>$PROJ_DIR$\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\misc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_dbgmcu.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_gpio.c</name>
