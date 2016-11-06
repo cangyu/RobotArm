@@ -1943,6 +1943,9 @@
       <name>$PROJ_DIR$\..\..\Application\app.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\Application\s_curve.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\Application\stm32f10x_it.c</name>
     </file>
   </group>

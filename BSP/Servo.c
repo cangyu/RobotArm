@@ -77,16 +77,17 @@ uint8_t recv_cmd(void)
  *	Details to describe a servo
  */
 char* servo_name[ROBOTIC_ARM_NUM]={"Servo0", "Servo1", "Servo2", "Servo3", "Servo4", "Servo5", "Servo6", "Servo7", "Servo8", "Servo9"};
-float cur_angle[ROBOTIC_ARM_NUM]={45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0};
-float target_angle[ROBOTIC_ARM_NUM]={45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0};
+float cur_angle[ROBOTIC_ARM_NUM]={45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 90.0, 45.0};
+float target_angle[ROBOTIC_ARM_NUM]={45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 90.0, 45.0};
 float ang_min[ROBOTIC_ARM_NUM]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-float ang_max[ROBOTIC_ARM_NUM]={90.0, 90.0, 90.0, 90.0, 90.0, 90.0, 90.0, 90.0, 180.0, 180.0};
-int cur_pwm[ROBOTIC_ARM_NUM]={1520, 1520, 1520, 1520, 1520, 1520, 1520, 1520, 150, 150};
-int target_pwm[ROBOTIC_ARM_NUM]={1520, 1520, 1520, 1520, 1520, 1520, 1520, 1520, 150, 150};
-int pwm_min[ROBOTIC_ARM_NUM]={900, 900, 900, 900, 900, 900, 900, 900, 50, 50};
-int pwm_max[ROBOTIC_ARM_NUM]={2100, 2100, 2100, 2100, 2100, 2100, 2100, 2100, 250, 250};
+float ang_max[ROBOTIC_ARM_NUM]={90.0, 90.0, 90.0, 90.0, 90.0, 90.0, 90.0, 90.0, 90.0, 90.0};
+int cur_pwm[ROBOTIC_ARM_NUM]={1520, 1520, 1520, 1520, 1520, 1520, 1520, 1520, 250, 150};
+int target_pwm[ROBOTIC_ARM_NUM]={1520, 1520, 1520, 1520, 1520, 1520, 1520, 1520, 250, 150};
+int pwm_min[ROBOTIC_ARM_NUM]={900, 900, 900, 900, 800, 800, 900, 900, 50, 50};
+int pwm_max[ROBOTIC_ARM_NUM]={2100, 2100, 2100, 2100, 2200, 2200, 2100, 2100, 250, 250};
 int gap[ROBOTIC_ARM_NUM]={20, 20, 20, 20, 20, 20, 20, 20, 20, 20};
-int pwm_resolution[ROBOTIC_ARM_NUM]={1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+int pwm_resolution[ROBOTIC_ARM_NUM]={16, 20, 20, 16, 40, 40, 40, 16, 16, 16};
+float speed[ROBOTIC_ARM_NUM]={2.83, 2.83, 2.83, 2.83, 1.0, 1.0, 2.83, 2.83, 16, 16};
 OS_EVENT *SemApply[ROBOTIC_ARM_NUM];
 char* sem_name[ROBOTIC_ARM_NUM]={"ServoSem0", "ServoSem1", "ServoSem2", "ServoSem3", "ServoSem4", "ServoSem5", "ServoSem6", "ServoSem7", "ServoSem8", "ServoSem9"};
 
@@ -124,14 +125,67 @@ void move(int i)
 	if(flag==OS_ERR_NONE)
 	{
 		target_pwm[i]=angle2pwm(i, target_angle[i]);
-		while(cur_pwm[i]!=target_pwm[i])
-		{
-			advance_one(i);
-			OSTimeDlyHMSM(0, 0, 0, gap[i]);
-		}
-		
+		optimized_move(i);		
 		OSFlagPost(ServoModify,(OS_FLAGS)(1<<i),OS_FLAG_SET,&flag);
 		assert(flag==OS_ERR_NONE);
+	}
+}
+
+const float acc_ratio=0.1;
+const float dec_ratio=0.2;
+const float fluent_ratio=1-(acc_ration+dec_ratio);
+
+int pwm_cnt;
+int step_cnt;
+int acc_step_cnt;
+int dec_step_cnt;
+int fluent_step_cnt;
+
+void optimized_move(int index)
+{
+  	pwm_cnt=abs(target_pwm[index]-cur_pwm[index]);
+	if(pwm_cnt<pwm_resolution[index])
+	  	return;
+	
+	step_cnt=pwm_cnt/pwm_resolution[index];
+	acc_step_cnt=step_cnt*acc_ratio;
+	dec_step_cnt=step_cnt*dec_ratio;
+	fluent_step_cnt=step_cnt-(acc_step_cnt+dec_step_cnt);
+	
+	if(acc_step_cnt<2 || dec_step_cnt<2 || fluent_step_cnt<2)
+	  	slow_move(index);
+	else
+	  	precise_move(index);
+}
+
+void precise_move(int index)
+{
+  	
+}
+
+void slow_move(int index)
+{
+  	const static float slow_ratio=2.0;
+	int cur_resolution=max(pwm_resolution[index]/slow_ratio, 1);
+	int origin_resolution=pwm_resolution[index];
+	
+	pwm_resolution[index]=cur_resolution;
+	unguarded_move(index);
+	pwm_resolution[index]=origin_resolution;
+}
+
+void unguarded_move_one(int index)
+{
+  	advance_one(i);
+	OSTimeDlyHMSM(0, 0, 0, gap[i]);
+}
+
+void unguarded_move(int index)
+{
+	while(cur_pwm[i]!=target_pwm[i])
+	{
+		advance_one(i);
+		OSTimeDlyHMSM(0, 0, 0, gap[i]);
 	}
 }
 
@@ -195,7 +249,6 @@ void Servo_InitMove(void)
 		pos_update(i);
 	}
 }
-
 
 /**
  *	Signal all used servos.
