@@ -136,7 +136,7 @@
         </option>
         <option>
           <name>OGUseCmsisDspLib</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>GRuntimeLibThreads</name>
@@ -266,7 +266,7 @@
         </option>
         <option>
           <name>CCLangConformance</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCSignedPlainChar</name>
@@ -373,7 +373,7 @@
         </option>
         <option>
           <name>IccLang</name>
-          <state>2</state>
+          <state>0</state>
         </option>
         <option>
           <name>IccCDialect</name>
@@ -381,11 +381,11 @@
         </option>
         <option>
           <name>IccAllowVLA</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>IccCppDialect</name>
-          <state>2</state>
+          <state>1</state>
         </option>
         <option>
           <name>IccExceptions</name>
@@ -401,7 +401,7 @@
         </option>
         <option>
           <name>IccCppInlineSemantics</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>IccCmsis</name>
@@ -1209,7 +1209,7 @@
         <option>
           <name>CCAllowList</name>
           <version>1</version>
-          <state>00000000</state>
+          <state>11111110</state>
         </option>
         <option>
           <name>CCDebugInfo</name>
@@ -1233,7 +1233,7 @@
         </option>
         <option>
           <name>CCLangConformance</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCSignedPlainChar</name>
@@ -1279,14 +1279,13 @@
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\..\..\Application</state>
           <state>$PROJ_DIR$\..\..\BSP</state>
-          <state>$PROJ_DIR$\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc</state>
           <state>$PROJ_DIR$\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x</state>
+          <state>$PROJ_DIR$\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc</state>
           <state>$PROJ_DIR$\..\..\uC-CPU</state>
           <state>$PROJ_DIR$\..\..\uC-CPU\Ports\ARM-Cortex-M3\IAR</state>
-          <state>$PROJ_DIR$\..\..\uC-LIB</state>
-          <state>$PROJ_DIR$\..\..\uC-LIB\Ports\ARM-Cortex-M3\IAR</state>
-          <state>$PROJ_DIR$\..\..\uCOS-II\Ports\ARM-Cortex-M\Generic\IAR</state>
           <state>$PROJ_DIR$\..\..\uCOS-II\Source</state>
+          <state>$PROJ_DIR$\..\..\uCOS-II\Ports\ARM-Cortex-M\Generic\IAR</state>
+          <state>$PROJ_DIR$\..\..\uC-LIB</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1306,7 +1305,7 @@
         </option>
         <option>
           <name>CCOptLevel</name>
-          <state>1</state>
+          <state>3</state>
         </option>
         <option>
           <name>CCOptStrategy</name>
@@ -1315,7 +1314,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>1</state>
+          <state>3</state>
         </option>
         <option>
           <name>CompilerMisraRules98</name>
@@ -1341,7 +1340,7 @@
         </option>
         <option>
           <name>IccLang</name>
-          <state>2</state>
+          <state>0</state>
         </option>
         <option>
           <name>IccCDialect</name>
@@ -1353,15 +1352,15 @@
         </option>
         <option>
           <name>IccCppDialect</name>
-          <state>2</state>
+          <state>1</state>
         </option>
         <option>
           <name>IccExceptions</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IccRTTI</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IccStaticDestr</name>
@@ -1943,6 +1942,9 @@
       <name>$PROJ_DIR$\..\..\Application\app.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\Application\s_curve.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\Application\stm32f10x_it.c</name>
     </file>
   </group>
@@ -1952,28 +1954,19 @@
       <name>$PROJ_DIR$\..\..\BSP\RobotArmCtrlBoard.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\BSP\Servo.cpp</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\BSP\Servo.h</name>
+      <name>$PROJ_DIR$\..\..\BSP\Servo.c</name>
     </file>
   </group>
   <group>
     <name>LIB</name>
     <group>
       <name>CMSIS</name>
-      <group>
-        <name>CoreSupport</name>
-      </group>
-      <group>
-        <name>DeviceSupport</name>
-        <file>
-          <name>$PROJ_DIR$\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\startup\iar\startup_stm32f10x_md.s</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\system_stm32f10x.c</name>
-        </file>
-      </group>
+      <file>
+        <name>$PROJ_DIR$\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\startup\iar\startup_stm32f10x_md.s</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\system_stm32f10x.c</name>
+      </file>
     </group>
     <group>
       <name>STM32F10x_StdPeriph_Driver</name>
@@ -2059,18 +2052,6 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\uCOS-II\Source\os_flag.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\uCOS-II\Source\os_mbox.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\uCOS-II\Source\os_mem.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\uCOS-II\Source\os_mutex.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\uCOS-II\Source\os_q.c</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\uCOS-II\Source\os_sem.c</name>

@@ -190,19 +190,6 @@ static void App_Task_ServoUpdate(void *p_arg)
  * @param  p_arg  Pointer to index.
  * @ret    None.
  */
-//extern void move(int i);
-void move(int i)
-{
-	uint8_t flag=0x00;
-	
-	OSSemPend(SemApply[i], 0, &flag);
-	assert(flag==OS_ERR_NONE);
-	
-	target_pwm[i]=angle2pwm(i, target_angle[i]);
-	optimized_move(i);
-	OSFlagPost(ServoModify,(OS_FLAGS)(1<<i),OS_FLAG_SET,&flag);
-	assert(flag==OS_ERR_NONE);
-}
 void App_Task_ServoMove(void *p_arg)
 {
 	while (DEF_TRUE)
