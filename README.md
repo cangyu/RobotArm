@@ -5,16 +5,16 @@ A robotic arm installed on drone for purpose of mechanical research.
 
 ##Feature
 8 servos are applied at its joints to simulate various action;  
-0.1&deg resolution;  
-Angular velocity up to 1000&deg/s;  
-Real time response and schedule.
-Adjustable S-Curve capable of asymmetrical settings or parameters.
+0.1 degree resolution;  
+Angular velocity up to 1000 degree/s;  
+Real time response and schedule.  
+Adjustable S-Curve, capable of asymmetrical settings or parameters.
 
 ##Platform
-MCU: STM32F103C8
-RTOS: uC/OS-II
-IDE: IAR is suggested
-Servo: KST
+MCU: STM32F103C8  
+RTOS: uC/OS-II  
+IDE: IAR is suggested  
+Servo: KST  
 
 ##Implementation
 The key part of this little project is to smooth the motion of each servo and eliminate pause or shake.  
@@ -25,4 +25,5 @@ Although the floating point operation takes much computation for each movement, 
 Besides, the rtos is used for receiving commands and do some synchronization work.  
 
 ##Decleration
-Just for research. Suggestions are welcome.
+Just for research.   
+Suggestions are welcome.
