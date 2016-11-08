@@ -6,9 +6,9 @@ extern OS_FLAG_GRP  *ServoModify;
  *	Details to control the servos
  */
 //Semaphores
-char* servo_name[ROBOTIC_ARM_NUM]={"Servo0", "Servo1", "Servo2", "Servo3", "Servo4", "Servo5", "Servo6", "Servo7", "Servo8", "Servo9"};
 OS_EVENT *SemApply[ROBOTIC_ARM_NUM];
-char* sem_name[ROBOTIC_ARM_NUM]={"ServoSem0", "ServoSem1", "ServoSem2", "ServoSem3", "ServoSem4", "ServoSem5", "ServoSem6", "ServoSem7", "ServoSem8", "ServoSem9"};
+//char* servo_name[ROBOTIC_ARM_NUM]={"Servo0", "Servo1", "Servo2", "Servo3", "Servo4", "Servo5", "Servo6", "Servo7", "Servo8", "Servo9"};
+//char* sem_name[ROBOTIC_ARM_NUM]={"ServoSem0", "ServoSem1", "ServoSem2", "ServoSem3", "ServoSem4", "ServoSem5", "ServoSem6", "ServoSem7", "ServoSem8", "ServoSem9"};
 
 //Receive buffer
 float angle[ROBOTIC_ARM_NUM]={45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 90.0, 90.0};
@@ -31,7 +31,7 @@ S_Curve s[ROBOTIC_ARM_NUM];
 uint16_t next_pwm[ROBOTIC_ARM_NUM];
 const uint16_t pwm_resolution[ROBOTIC_ARM_NUM]={16, 20, 20, 16, 40, 40, 40, 16, 16, 16};// x0.1 -> degree
 //const float intrinsic_speed[ROBOTIC_ARM_NUM]={2.83, 2.83, 2.83, 2.83, 1.0, 1.0, 2.83, 2.83, 16, 16};// ms/degree
-const float max_speed[ROBOTIC_ARM_NUM]={60.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0};// degree/s
+const float max_speed[ROBOTIC_ARM_NUM]={45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0};// degree/s
 float time_dist[ROBOTIC_ARM_NUM][SEGMENT_NUM]={
   {0.08, 0.14, 0.08, 0.7, 0.08, 0.14, 0.08},
   {0.08, 0.14, 0.08, 0.7, 0.08, 0.14, 0.08},
@@ -143,7 +143,7 @@ void Servo_Run(void)
 /**
  *	Convert angle value to relevant PWM count.
  */
-int angle2pwm(int i, float _ang)
+uint16_t angle2pwm(int i, float _ang)
 {
 	if(_ang<ang_min[i] || _ang>ang_max[i])
 	{
@@ -151,13 +151,13 @@ int angle2pwm(int i, float _ang)
 		return cur_pwm[i];
 	}
 	else
-	  return (int)((_ang-ang_min[i])/(ang_max[i]-ang_min[i])*(pwm_max[i]-pwm_min[i])+pwm_min[i]);
+	  return (uint16_t)((_ang-ang_min[i])/(ang_max[i]-ang_min[i])*(pwm_max[i]-pwm_min[i]))+pwm_min[i];
 }
 
 /**
  *	Convert PWM count to relevant angle value.
  */
-float pwm2ang(int i, int _pwm)
+float pwm2ang(int i, uint16_t _pwm)
 {
 	if(_pwm<pwm_min[i] || _pwm>pwm_max[i])
 	{
@@ -190,21 +190,31 @@ void move(int i)
 void optimized_move(int index)
 {
   	const int delta_pwm=target_pwm[index]-cur_pwm[index];//PWM count
-	if(abs(delta_pwm)<pwm_resolution[index])
+	const float delta_t=fabs(target_angle[index]-cur_angle[index])/max_speed[index]*1000.0;//ms
+	
+	if(abs(delta_pwm)<pwm_resolution[index] || delta_t<pwm_period[index])
 	  	return;
 	
 	const int pwm_base=cur_pwm[index];
-	const float delta_t=fabs(target_angle[index]-cur_angle[index])/max_speed[index]*1000.0;//ms
+	
 	
 	s_curve_create(&s[index], delta_pwm, delta_t, time_dist[index]);
 	
 	const int N=(int)(delta_t/pwm_period[index]);
 	for(int i=1;i<=N;i++)
-	{
-	  	next_pwm[index]=(int)(get_position(&s[index], i*pwm_period[index]))+pwm_base;
-		advance_to_next(index);
-		OSTimeDlyHMSM(0, 0, 0, pwm_period[index]);
-	}
+		unguarded_move_one(index,(int)(get_position(&s[index], i*pwm_period[index]))+pwm_base);
+	
+	unguarded_move_one(index, target_pwm[index]);//final move
+}
+
+/**
+ *	Unguarded move one step to next PWM position. 
+ */
+inline void unguarded_move_one(int index, uint16_t _pwm_pos)
+{
+  	next_pwm[index]=_pwm_pos;
+	advance_to_next(index);
+	OSTimeDlyHMSM(0, 0, 0, pwm_period[index]);
 }
 
 /**

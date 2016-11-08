@@ -181,7 +181,8 @@ int calc_gap_index(S_Curve *_s, float _t)
 	while (i < SEGMENT_NUM && _t > _s->p[i])
 		++i;
 
-	assert(i < SEGMENT_NUM);
+	if(i >= SEGMENT_NUM)
+	  	i=SEGMENT_NUM-1;
 
 	return i;
 }

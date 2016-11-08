@@ -34,13 +34,14 @@ extern const uint16_t pwm_resolution[ROBOTIC_ARM_NUM];
 /* Function Prototypes */
 int min(int a, int b);
 int max(int a, int b);
-int angle2pwm(int i, float _ang);
-float pwm2ang(int i, int _pwm);
+uint16_t angle2pwm(int i, float _ang);
+float pwm2ang(int i, uint16_t _pwm);
 extern void move(int i);
 void advance_to_next(int i);
 void pos_update(int index);
 void Servo_InitMove(void);
 void Servo_Run(void);
 void optimized_move(int index);
+void unguarded_move_one(int index, uint16_t _pwm_pos);
 
 #endif
