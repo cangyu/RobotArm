@@ -13,6 +13,7 @@
 #include "s_curve.h"
 
 /* Defines */
+#define SIMPLE_MOVE 0
 #define ROBOTIC_ARM_NUM 10
 #define SERVOS_USED 0x017F
 
@@ -43,5 +44,6 @@ void Servo_InitMove(void);
 void Servo_Run(void);
 void optimized_move(int index);
 void unguarded_move_one(int index, uint16_t _pwm_pos);
+void simple_move(int index);
 
 #endif

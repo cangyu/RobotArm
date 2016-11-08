@@ -29,20 +29,20 @@ const uint16_t pwm_period[ROBOTIC_ARM_NUM]={3, 3, 3, 3, 3, 3, 3, 3, 3, 20};//ms
 //Speed settings
 S_Curve s[ROBOTIC_ARM_NUM];
 uint16_t next_pwm[ROBOTIC_ARM_NUM];
-const uint16_t pwm_resolution[ROBOTIC_ARM_NUM]={16, 20, 20, 16, 40, 40, 40, 16, 16, 16};// x0.1 -> degree
+const uint16_t pwm_resolution[ROBOTIC_ARM_NUM]={6, 20, 20, 16, 40, 40, 40, 16, 16, 16};// x0.1 -> degree
 //const float intrinsic_speed[ROBOTIC_ARM_NUM]={2.83, 2.83, 2.83, 2.83, 1.0, 1.0, 2.83, 2.83, 16, 16};// ms/degree
-const float max_speed[ROBOTIC_ARM_NUM]={45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0, 45.0};// degree/s
+const float max_speed[ROBOTIC_ARM_NUM]={30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0};// degree/s
 float time_dist[ROBOTIC_ARM_NUM][SEGMENT_NUM]={
-  {0.08, 0.14, 0.08, 0.7, 0.08, 0.14, 0.08},
-  {0.08, 0.14, 0.08, 0.7, 0.08, 0.14, 0.08},
-  {0.08, 0.14, 0.08, 0.7, 0.08, 0.14, 0.08},
-  {0.08, 0.14, 0.08, 0.7, 0.08, 0.14, 0.08},
-  {0.08, 0.14, 0.08, 0.7, 0.08, 0.14, 0.08},
-  {0.08, 0.14, 0.08, 0.7, 0.08, 0.14, 0.08},
-  {0.08, 0.14, 0.08, 0.7, 0.08, 0.14, 0.08},
-  {0.08, 0.14, 0.08, 0.7, 0.08, 0.14, 0.08},
-  {0.08, 0.14, 0.08, 0.7, 0.08, 0.14, 0.08},
-  {0.08, 0.14, 0.08, 0.7, 0.08, 0.14, 0.08},
+  {0.19, 0.14, 0.19, 0.16, 0.14, 0.04, 0.14},
+  {0.19, 0.14, 0.19, 0.16, 0.14, 0.04, 0.14},
+  {0.19, 0.14, 0.19, 0.16, 0.14, 0.04, 0.14},
+  {0.19, 0.14, 0.19, 0.16, 0.14, 0.04, 0.14},
+  {0.19, 0.14, 0.19, 0.16, 0.14, 0.04, 0.14},
+  {0.19, 0.14, 0.19, 0.16, 0.14, 0.04, 0.14},
+  {0.19, 0.14, 0.19, 0.16, 0.14, 0.04, 0.14},
+  {0.19, 0.14, 0.19, 0.16, 0.14, 0.04, 0.14},
+  {0.19, 0.14, 0.19, 0.16, 0.14, 0.04, 0.14},
+  {0.19, 0.14, 0.19, 0.16, 0.14, 0.04, 0.14},
 };
 
 /**
@@ -179,10 +179,44 @@ void move(int i)
 	assert(flag==OS_ERR_NONE);
 	
 	target_pwm[i]=angle2pwm(i, target_angle[i]);
+#if(SIMPLE_MOVE)
+	simple_move(i);
+#else
 	optimized_move(i);
+#endif
 	OSFlagPost(ServoModify,(OS_FLAGS)(1<<i),OS_FLAG_SET,&flag);
 	assert(flag==OS_ERR_NONE);
 }
+
+#if(SIMPLE_MOVE)
+//Previous method adopted to move the servos according to 7Bot.
+const int dt=20;
+void simple_move(int index)
+{
+  	const int delta_pwm=target_pwm[index]-cur_pwm[index];//PWM count
+	const float delta_t=fabs(target_angle[index]-cur_angle[index])/max_speed[index]*1000.0;//ms
+	
+	if(abs(delta_pwm)<pwm_resolution[index])
+	  	return;
+	
+	const int pwm_base=cur_pwm[index];
+	
+	const int N=(int)(delta_t/dt);
+	const int dpwm=delta_pwm/N;
+	
+	for(int i=0;i<N;i++)
+	{
+		next_pwm[index]=pwm_base+i*dpwm;
+		advance_to_next(index);
+		OSTimeDlyHMSM(0, 0, 0, dt);
+	}
+	
+	next_pwm[index]=target_pwm[index];
+	advance_to_next(index);
+	OSTimeDlyHMSM(0, 0, 0, dt);
+	
+}
+#endif
 
 /**
  *	Move the servo according to given S-Curve. 
@@ -192,7 +226,7 @@ void optimized_move(int index)
   	const int delta_pwm=target_pwm[index]-cur_pwm[index];//PWM count
 	const float delta_t=fabs(target_angle[index]-cur_angle[index])/max_speed[index]*1000.0;//ms
 	
-	if(abs(delta_pwm)<pwm_resolution[index] || delta_t<pwm_period[index])
+	if(abs(delta_pwm)<pwm_resolution[index])
 	  	return;
 	
 	const int pwm_base=cur_pwm[index];
