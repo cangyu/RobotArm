@@ -9,7 +9,8 @@ A robotic arm installed on drone for mechanical research.
 > * Adjustable S-Curve, capable of asymmetrical settings or parameters.
 
 ## Overview
-![S_Curve](https://github.com/cangyu/Sky/blob/master/pic/VIEW_V1.0.JPG)
+![Overview](https://github.com/cangyu/RobotArm/blob/master/pic/overview_front_top.png)
+![S_Curve](https://github.com/cangyu/RobotArm/blob/master/pic/scurve.png)
 
 ## Platform
 MCU: STM32F103C8(no FPU)  
